@@ -1,0 +1,27 @@
+name: Bi-Daily KTTY World Query Runner
+
+on:
+  schedule:
+    # Runs every 48 hours (every 2 days) at 10:00 PM UTC
+    - cron: '0 22 */2 * *'
+  workflow_dispatch:  # Allows manual trigger for testing
+
+jobs:
+  run-query:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Run query script
+        env:
+          DEFI_JOSH_DUNE_QUERY_API_KEY: ${{ secrets.DUNE_API_KEY }}
+        run: |
+          pip install requests python-dotenv
+          python query.py
